@@ -23,14 +23,17 @@ module.exports.fetchCourseDetails = async (scrapurl, callback) => {
                 // console.log({ courseLink });
 
                 let courseDetails = await scrapCourseDetails.fetchCourseDetails(courseLink);
-                courseData.push(courseDetails)
+                // courseData.push(courseDetails)
                 // console.log("Course Data Array: ", courseData);
             }
         }
-        
+
         await browser.close()
-        return courseData
-        
+        // if (courseData.length) {
+        //     return courseData
+        // }
+        // return
+
     } catch (error) {
         console.log(error)
     }

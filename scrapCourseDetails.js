@@ -1,5 +1,8 @@
+const fs = require('fs')
 const puppeteer = require('puppeteer');
 const uid = require('uid')
+const jsonfileData = require('./data.json') || [];
+
 // const scrapurl = 'https://www.adelaide.edu.au/course-outlines/107654/1/sem-1/';
 
 module.exports.fetchCourseDetails = async (scrapurl) => {
@@ -65,7 +68,7 @@ module.exports.fetchCourseDetails = async (scrapurl) => {
         }
 
         await browser.close();
-        return new courseModel(courseName,
+        let courseData = new courseModel(courseName,
             courseCode,
             coordinatingUnit,
             level,
@@ -75,6 +78,17 @@ module.exports.fetchCourseDetails = async (scrapurl) => {
             location,
             prerequisites = "NA",
             courseLink)
+
+        if (!jsonfileData.includes(courseData)) {
+            jsonfileData.push(courseData)
+            fs.writeFile('data.json', JSON.stringify(jsonfileData), (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("JSON data is saved. Data: ",courseData);
+            });
+        }
+        return
     } catch (error) {
         console.log(error)
     }
@@ -93,7 +107,7 @@ const courseModel = function (
     prerequisites = "NA",
     courseLink
 ) {
-    this.courseId = uid(5)
+    this.courseId = "ADU-" + uid(5)
     this.courseName = courseName
     this.courseCode = courseCode
     this.cricosCode = "00123M"
