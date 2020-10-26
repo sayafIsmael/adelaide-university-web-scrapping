@@ -15,18 +15,66 @@ module.exports.fetchCourseDetails = async (scrapurl) => {
         let courseDetails = await course.$$('tr')
 
         // console.log(courseDetails.length)
-        const courseData = []
+        // const courseData = []
+
+        let courseName;
+        let courseCode;
+        let coordinatingUnit;
+        let level;
+        let contact;
+        let courseDescription;
+        let term;
+        let location;
+        let prerequisites;
+        let courseLink = scrapurl
 
         for (const courseDetail of courseDetails) {
             const th = await courseDetail.$eval('th', th => th.innerHTML)
             const td = await courseDetail.$eval('td', td => td.innerHTML)
 
-            courseData.push({ th, td })
+            if (th == "Course Code") {
+                courseCode = td
+            }
+            if (th == "Course") {
+                courseName = td
+            }
+            if (th == "Coordinating Unit") {
+                coordinatingUnit = td
+            }
+            if (th == "Term") {
+                term = td
+            }
+            if (th == "Level") {
+                level = td
+            }
+            if (th == "Location/s") {
+                location = td
+            }
+            if (th == "Contact") {
+                contact = td
+            }
+            if (th == "Prerequisites") {
+                prerequisites = td
+            }
+            if (th == "Course Description") {
+                courseDescription = td
+            }
+
+            // courseData.push({ th, td })
             // console.log({ th, td })
         }
 
         await browser.close();
-        return courseData
+        return new courseModel(courseName,
+            courseCode,
+            coordinatingUnit,
+            level,
+            contact,
+            courseDescription,
+            term,
+            location,
+            prerequisites = "NA",
+            courseLink)
     } catch (error) {
         console.log(error)
     }
@@ -109,67 +157,3 @@ const courseModel = function (
     this.courseLink = courseLink
 }
 
-// const model = {
-//     courseId: "CDU001",
-//     courseName: "Bachelor of Accounting (WACC01 - 2021)",
-//     courseCode: "590251",
-//     cricosCode: "00123M",
-//     studyArea: "Accounting",
-//     courseLevel: "Undergraduate",
-//     courseStudyModes: [
-//         {
-//             "studyMode": "Full-time",
-//             "duration": "3 year/s"
-//         }
-//     ],
-//     totalCreditPoints: "NA",
-//     courseUnits: [
-//         {
-//             "unitType": "Core Units (16 units)",
-//             "creditPoints": "160 cp",
-//             "description": "",
-//             "unitList": [
-//                 {
-//                     "code": "ACT102",
-//                     "title": "ACT102 - Introduction to Accounting",
-//                     "year": "2020",
-//                     "hours": null,
-//                     "creditPoints": "10",
-//                     "semester": [
-//                         {
-//                             "year": "2020",
-//                             "semester": "Semester 1",
-//                             "attendanceMode": "Internal",
-//                             "location": "CDU Sydney",
-//                             "learningMethod": "OLR"
-//                         }
-//                     ],
-//                     "sector": "Higher Education",
-//                     "discipline": "Accounting and Finance",
-//                     "prerequisites": "NA",
-//                     "incompatible": "ACT101, CMA101",
-//                     "assumedKnowledge": "NA",
-//                     "description": ""
-//                 },
-//             ]
-//         }
-//     ],
-//     isAvailableOnline: null,
-//     campuses: [
-//         {
-//             "type": "Offline",
-//             "campusName": "CDU Waterfront Darwin (CSP)",
-//             "postalAddress": null,
-//             "state": null,
-//             "geolocation": {
-//                 "lat": null,
-//                 "lan": null
-//             }
-//         },
-//     ],
-//     courseFees: [],
-//     institutionSpecificData: {
-//         "ADUCode": "NA"
-//     },
-//     courseLink: "https://www.cdu.edu.au/study/bachelor-accounting-wacc01-2021"
-// }
