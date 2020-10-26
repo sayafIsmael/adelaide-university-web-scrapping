@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const scrapCourseDetails = require('./scrapCourseDetails');
 const scrapurl = "https://www.adelaide.edu.au/course-outlines/ug/aborig/";
 
-// module.exports.fetchCourseDetails = async (scrapurl, callback) => {
-(async () => {
+module.exports.fetchCourseDetails = async (scrapurl, callback) => {
+    // (async () => {
 
     try {
         const browser = await puppeteer.launch({ headless: true });
@@ -14,6 +14,7 @@ const scrapurl = "https://www.adelaide.edu.au/course-outlines/ug/aborig/";
         let course = await page.$('div[class="ui-widget-search-results"] > ul');
         let year = await course.$eval('h2', h2 => h2.innerHTML)
 
+        const courseData = []
         if (year.includes(2020)) {
             const courses = await course.$$('li > a');
             for (const course of courses) {
@@ -21,14 +22,17 @@ const scrapurl = "https://www.adelaide.edu.au/course-outlines/ug/aborig/";
                 const courseLink = await link.jsonValue();
                 // console.log({ courseLink });
 
-                let courseData = await scrapCourseDetails.fetchCourseDetails(courseLink);
-                console.log("Course Data Array: ", courseData);
+                let courseDetails = await scrapCourseDetails.fetchCourseDetails(courseLink);
+                courseData.push(courseDetails)
+                // console.log("Course Data Array: ", courseData);
             }
         }
-
+        
         await browser.close()
+        return courseData
+        
     } catch (error) {
         console.log(error)
     }
-})();
-// }
+    // })();
+}
