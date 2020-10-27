@@ -21,7 +21,7 @@ const scrapCourse = require('./scrapCourse');
             const courseLink = await link.jsonValue()
             const courseName = await course.$eval('b', b => b.innerHTML);
             // console.log({ courseName, courseLink })
-            let courseData =  await scrapCourse.fetchCourseDetails(courseLink)
+            await scrapCourse.fetchCourseDetails(courseLink)
             // if(courseData){
             //     jsonData.push(...courseData)
             //     console.log("Course Data: ", jsonData);

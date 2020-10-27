@@ -76,14 +76,14 @@ module.exports.fetchCourseDetails = async (scrapurl) => {
             courseDescription,
             term,
             location,
-            prerequisites = "NA",
+            prerequisites,
             courseLink)
 
         if (!jsonfileData.includes(courseData)) {
             jsonfileData.push(courseData)
             fs.writeFile('data.json', JSON.stringify(jsonfileData), (err) => {
                 if (err) {
-                    throw err;
+                    console.log(err);
                 }
                 console.log("JSON data is saved. Data: ",courseData);
             });

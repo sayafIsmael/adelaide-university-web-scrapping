@@ -21,8 +21,7 @@ module.exports.fetchCourseDetails = async (scrapurl, callback) => {
                 const link = await course.getProperty('href');
                 const courseLink = await link.jsonValue();
                 // console.log({ courseLink });
-
-                let courseDetails = await scrapCourseDetails.fetchCourseDetails(courseLink);
+                await scrapCourseDetails.fetchCourseDetails(courseLink);
                 // courseData.push(courseDetails)
                 // console.log("Course Data Array: ", courseData);
             }
@@ -32,7 +31,7 @@ module.exports.fetchCourseDetails = async (scrapurl, callback) => {
         // if (courseData.length) {
         //     return courseData
         // }
-        // return
+        return
 
     } catch (error) {
         console.log(error)
